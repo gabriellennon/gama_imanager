@@ -1,7 +1,13 @@
+import Router from "./routes/index.router"
+import { GlobalStyle } from "./styles/global"
+
 function App() {
 
   return (
-    <h1>Initial commit</h1>
+    <>
+      <Router />
+      <GlobalStyle />
+    </>
   )
 }
 
