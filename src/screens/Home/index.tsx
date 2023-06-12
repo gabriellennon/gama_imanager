@@ -1,7 +1,10 @@
-import { Link, NavLink, useNavigate } from "react-router-dom"
-import LogoPng from '../../assets/icons/logo.png'
-import { ArrowCircleRight, CurrencyCircleDollar, House, Package } from "phosphor-react"
+import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
+import { NewModal } from "../../components/NewModal"
+import { NavBar } from "../../components/NavBar"
+import { ContainerHome, ContentTitle, ContentBody } from './styles';
+import { cardsHome } from "../../utils/dataCards";
+import { Card } from "../../components/Card";
 
 export const Home = () => {
     //Hook react hourter dom
@@ -20,44 +23,34 @@ export const Home = () => {
     
     return (
         <>
-            <header>
-                <div>
-                    <img src={LogoPng} alt="" />
-                    <nav>
-                        <a href=""></a>
-                        <NavLink to="/" title="Home" >
-                            <House size={16} color="#50555A" />
-                            <span>Home</span>
-                        </NavLink>
-                        <NavLink to="/vendas" title="Vendas" >
-                            <CurrencyCircleDollar size={16} color="#50555A" />
-                            <span>Vendas</span>
-                        </NavLink>
-                        <NavLink to="/estoque" title="Estoque" >
-                            <Package size={16} color="#50555A" />
-                            <span>Estoque</span>
-                        </NavLink>
-                    </nav>
-                </div>
-                <div>
-                    <img src="" alt="" />
-                </div>
-            </header>
-            <div>
-                <div>
+            <NavBar />
+            <ContainerHome>
+                <ContentTitle>
                     <h1>Olá, Gabriel</h1>
                     <p>O que deseja acessar? Escolha abaixo</p>
-                </div>
-                <div>
-                    <Link to="">
-                        <div>
-                            <h5>Vendas</h5>
-                            <p>Gerencie suas vendas e saídas de estoque</p>
-                        </div>
-                        <ArrowCircleRight size={25} color="#134E87" />
-                    </Link>
-                </div>
-            </div>
+                </ContentTitle>
+                <ContentBody>
+                    {cardsHome.map(card => (
+                        <Card title={card.title} description={card.description} goTo={card.goTo} key={card.id} />
+                    ))}
+                </ContentBody>
+            </ContainerHome>
+                <NewModal 
+                    isOpen={false} 
+                    onRequestClose={() => {}} 
+                    title="Cadastrar Venda"
+                    handleSubmitFormModal={() => {}}
+                >
+                    <input 
+                        type="text" 
+                        placeholder='Título' 
+                    />
+                    <input 
+                        type="number" 
+                        placeholder="Valor" 
+                    />
+                    <button type="submit">Cadastar</button>
+                </NewModal>
         </>
     )
 }

@@ -1,21 +1,15 @@
 import styled from 'styled-components';
 
 export const ContainerHome = styled.div`
-    /* background: var(--background-login) url('../../assets/images/backgroundCar.png') center; */
     background: var(--background-login) ;
-    height: 100vh;
-    width: 100%;
-    display: flex;
-    align-items: center;
-
+    display: grid;
+    grid-template-columns: 2.5fr 1fr;
+    min-height: 100vh;
 `;
 
-export const ContainerImage = styled.div`
-    width: 70%;
-`;
+export const ContainerImage = styled.div``;
 
 export const ContainerFormLogin = styled.div`
-    width: 30%;
     padding: 0 1.875rem;
     display: flex;
     align-items: center;

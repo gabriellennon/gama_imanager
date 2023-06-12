@@ -23,7 +23,7 @@ Esse projeto foi desenvolvido com o objetivo de praticar com os alunos do curso 
 ## Clone do projeto
 
 ```jsx
-git clone https://github.com/gabriellennon/imanager.git
+git clone https://github.com/gabriellennon/gama_imanager.git
 ```
 
 Após baixar basta:

@@ -1,6 +1,12 @@
+import { FormEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { loginFormSchema } from './schema';
+
 import BackgroundCarPng from '../../assets/images/backgroundCar.png';
 import LogoPng from '../../assets/icons/logo.png';
-
 import {
     ContainerHome,
     ContainerImage,
@@ -10,54 +16,56 @@ import {
     ContainerButtons,
 } from './styles';
 import { ButtonPrimary } from '../../components/Button';
-import { FormEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+
+type TLoginFormInputs = z.infer<typeof loginFormSchema>
 
 export const Login = () => {
-    // Hook de estado 
-    // const [nomeDaVariavel, nomedaFuncaoQuevaiMudarOEstado] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    
-
     //Hook react hourter dom
     const navigate = useNavigate();
 
+    //React Hook Form
+    const { 
+        register, 
+        handleSubmit, 
+        formState: { isSubmitting, errors, isValid } 
+    } = useForm<TLoginFormInputs>({
+        resolver: zodResolver(loginFormSchema)
+    });
 
-    const submitLogin = (event: FormEvent) => {
-        event.preventDefault();
-        if (email.length && password.length) {
-            localStorage.setItem('@userInfo', JSON.stringify({ emailUser: email}))
+
+    const submitLogin = (data: TLoginFormInputs) => {
+        if (isValid) {
+            localStorage.setItem('@userInfo', JSON.stringify({ emailUser: data.email}))
             navigate('/')
         }
     }
 
     return (
-        <ContainerHome >
+        <ContainerHome >    
             <ContainerImage >
                 <img src={BackgroundCarPng} alt="" />
             </ContainerImage>
             <ContainerFormLogin>
                 <img src={LogoPng} alt="" />
-                <FormLogin onSubmit={submitLogin}>
+                <FormLogin onSubmit={handleSubmit(submitLogin)}>
                     <ContainerInputs>
                         <label>E-mail</label>
                         <input 
                             type="text" 
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            {...register('email')}
                         />
+                        {errors.email && <p>{errors.email?.message}</p>}
                     </ContainerInputs>
                     <ContainerInputs>
                         <label>Senha</label>
                         <input 
                             type="password" 
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            {...register('password')}
                         />
+                        {errors.password &&  <p>{errors.password?.message}</p>}
                     </ContainerInputs>
                     <ContainerButtons>
-                        <ButtonPrimary type="submit" title='Entrar' />
+                        <ButtonPrimary type="submit" title='Entrar' disabled={isSubmitting} />
                         <p>Primeira vez aqui? <a>Clique aqui</a></p>
                     </ContainerButtons>
                 </FormLogin>
