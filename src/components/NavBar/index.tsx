@@ -19,11 +19,11 @@ export const NavBar = () => {
                         <House size={16} color="#50555A" />
                         <span>Home</span>
                     </NavLink>
-                    <NavLink to="/vendas" title="Vendas" >
+                    <NavLink to="/sales" title="Vendas" >
                         <CurrencyCircleDollar size={16} color="#50555A" />
                         <span>Vendas</span>
                     </NavLink>
-                    <NavLink to="/estoque" title="Estoque" >
+                    <NavLink to="/stock" title="Estoque" >
                         <Package size={16} color="#50555A" />
                         <span>Estoque</span>
                     </NavLink>

@@ -16,12 +16,15 @@ import {
     ContainerButtons,
 } from './styles';
 import { ButtonPrimary } from '../../components/Button';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../store/modules/user/reducer';
 
 type TLoginFormInputs = z.infer<typeof loginFormSchema>
 
 export const Login = () => {
     //Hook react hourter dom
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     //React Hook Form
     const { 
@@ -35,6 +38,11 @@ export const Login = () => {
 
     const submitLogin = (data: TLoginFormInputs) => {
         if (isValid) {
+            dispatch(setUser({
+                name: "Gabriel Lennon",
+                imageUser: "https://github.com/gabriellennon.png",
+                emailUser: "gabriellennon7@gmail.com"
+            }))
             localStorage.setItem('@userInfo', JSON.stringify({ emailUser: data.email}))
             navigate('/')
         }
