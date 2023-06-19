@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import toast, { Toaster } from 'react-hot-toast';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginFormSchema } from './schema';
@@ -18,6 +19,7 @@ import {
 import { ButtonPrimary } from '../../components/Button';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../store/modules/user/reducer';
+import { login } from '../../services/login.service';
 
 type TLoginFormInputs = z.infer<typeof loginFormSchema>
 
@@ -25,6 +27,7 @@ export const Login = () => {
     //Hook react hourter dom
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
 
     //React Hook Form
     const { 
@@ -37,14 +40,18 @@ export const Login = () => {
 
 
     const submitLogin = (data: TLoginFormInputs) => {
-        if (isValid) {
-            dispatch(setUser({
-                name: "Gabriel Lennon",
-                imageUser: "https://github.com/gabriellennon.png",
-                emailUser: "gabriellennon7@gmail.com"
-            }))
-            localStorage.setItem('@userInfo', JSON.stringify({ emailUser: data.email}))
-            navigate('/')
+        if(isValid){
+            setLoading(true)
+            login().then((response) => {
+                dispatch(setUser(response.data))
+                localStorage.setItem('@userInfo', JSON.stringify({emailUser: response.data}))
+                navigate('/')
+            })
+            .catch((error) => {
+                console.error(error)
+                toast.error("Ops! Algo deu errado, tente novamente. 😵‍💫")
+                setLoading(false);
+            })
         }
     }
 
@@ -73,11 +80,20 @@ export const Login = () => {
                         {errors.password &&  <p>{errors.password?.message}</p>}
                     </ContainerInputs>
                     <ContainerButtons>
-                        <ButtonPrimary type="submit" title='Entrar' disabled={isSubmitting} />
+                        <ButtonPrimary 
+                            title='Entrar' 
+                            type='submit' 
+                            disabled={isSubmitting && loading} 
+                            isLoading={loading}
+                        />
                         <p>Primeira vez aqui? <a>Clique aqui</a></p>
                     </ContainerButtons>
                 </FormLogin>
             </ContainerFormLogin>
+            <Toaster
+                position="top-right"
+                reverseOrder={false}
+            />
         </ContainerHome>
     )
 }
